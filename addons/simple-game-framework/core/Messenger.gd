@@ -26,43 +26,45 @@
 # SOFTWARE.                                                                      #
 ##################################################################################
 
-# @class `Module`
-# 逻辑模块
-# 代表一个逻辑功能，例如成就、商店、战斗等
+# @class `Messenger`
+# 消息调度器，允许添加监听所有时间的监听器
 
 tool
 extends EventEmitter
-class_name Module
+class_name Messenger
+const utils = preload("res://addons/gdutils/utils/__init__.gd")
 
-# 所有模块创建完毕后执行
-func setup() -> void:
-	pass
+# 监听器接口类
+class IMessageListerner:
+	func on_event(type: String, data):
+		pass
 
-# 模块是否准备就绪
-func is_ready() -> bool: 
-	return true
+var _listeners = []
 
-# 初始化模块
-func initialize() -> void:
-	pass
+# 添加监听器  
+# - - - - - - - - - -  
+# *Parameters*  
+# * [lisener: Object] 监听器，实现了 IMessageListerner 的类对象  
+func add_lisener(lisener: Object):
+	if utils.implements(lisener, IMessageListerner):
+		_listeners.append(lisener)
 
-# 模块开始
-func start() -> void:
-	pass
+# 移除监听器
+func remove_lisener(lisener: Object):
+	if lisener in _listeners:
+		_listeners.erase(lisener)
 
-# 恒更新，不考虑逻辑是否初始化完毕或暂停等逻辑，固定每帧调用
-func process(dt: float) -> void:
-	pass
+# 移除所有监听器	
+func remove_all_liseners():
+	self._listeners = []
 
-# 逻辑更新
-func update(dt: float) -> void:
-	pass
-
-# 存档
-func save() -> Dictionary :
-	return {}
-
-# 读档
-func load(data: Dictionary) -> void:
-	pass
-
+# 派发事件  
+# - - - - - - - - - -  
+# *Parameters*  
+# * [type: String] 事件类型  
+# * [params: Variant = null] 事件参数  
+#
+func emit(type: String, params = null):
+	for listener in _listeners:
+		listener.on_event(type, params)
+	.emit(type, params)
