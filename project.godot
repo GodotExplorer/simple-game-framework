@@ -1,0 +1,45 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "Module",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/core/Module.gd"
+}, {
+"base": "Node",
+"class": "SimpleGameFramework",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/core/SimpleGameFramework.gd"
+}, {
+"base": "Module",
+"class": "UtilsModule",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/UtilsModule.gd"
+} ]
+_global_script_class_icons={
+"Module": "",
+"SimpleGameFramework": "",
+"UtilsModule": ""
+}
+
+[application]
+
+config/name="simple-game-framework"
+run/main_scene="res://Control.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+game="*res://test/game.gd"
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
