@@ -33,27 +33,10 @@ tool
 extends Reference
 class_name EventEmitter
 
-# 事件回调对象
-class EventHandler:
+# 回调对象
+class EventHandler extends Handler:
 	var type: String = ""
-	var target: Object = null
-	var method: String = ""
 	var one_shot = false
-	var arguments = []
-	
-	# 调用回调函数，参数形式同 `callv`
-	func call_func(params = null):
-		var args = []
-		if typeof(params) == TYPE_NIL:
-			args = self.arguments
-		else:
-			if typeof(params) == TYPE_ARRAY:
-				for p in params: args.append(p)
-			else:
-				args.append(params)
-			for p in self.arguments:
-				args.append(p)
-		return self.target.callv(self.method, args)
 
 # 事件回调表
 # Map<String, EventHandler[]>
@@ -65,7 +48,7 @@ var _event_handlers = {}
 # * [type: String] 事件类型  
 # * [params: Variant = null] 事件参数  
 #
-func emit(type: String, params = null):
+func emit(type: String, params = []):
 	if type in _event_handlers:
 		var remove_handlers = []
 		var handlers = _event_handlers[type]
@@ -109,7 +92,7 @@ func on(type: String, target: Object, method: String, arguments = []) -> EventHa
 # - - - - - - - - - -  
 # *Returns* EventHandler  
 # * 返回事件回调对象，可用于取消回调
-func once(type: String, target: Object, method: String, arguments = []) -> EventHandler:
+func once(type, target: Object, method: String, arguments = []) -> Handler:
 	var handler = self.on(type, target, method, arguments)
 	handler.one_shot = true
 	return handler

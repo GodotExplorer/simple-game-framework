@@ -29,6 +29,7 @@
 tool
 
 const EventEmitter = preload("EventEmitter.gd")
+const Handler = preload("Handler.gd")
 const Messenger = preload("Messenger.gd")
 const Module = preload("Module.gd")
 const SimpleGameFramework = preload("SimpleGameFramework.gd")
