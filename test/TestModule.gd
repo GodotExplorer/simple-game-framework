@@ -1,7 +1,7 @@
 extends Module
 
 func initialize():
-	game.modules.utils.add_daliy_task(funcref(self, 'once_a_day'))
+	game.modules.utils.add_daliy_task(self, 'once_a_day')
 
 func start():
 	print("Test module started")

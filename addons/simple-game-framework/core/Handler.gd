@@ -30,11 +30,18 @@ tool
 extends Reference
 class_name Handler
 
-# 回调对象
-var target: Object = null
+# 回调方法
 var method: String = ""
+# 回调附加参数
 var arguments = []
-
+# 回调对象
+var target: Object = null setget _set_target, _get_target
+var _target_instance_id = 0
+func _set_target(target: Object):
+	_target_instance_id = 0 if target == null else target.get_instance_id()
+func _get_target() -> Object:
+	return instance_from_id(_target_instance_id)
+	
 # 调用回调函数，参数形式同 `callv`
 func call_func(params = []):
 	var args = []
@@ -44,4 +51,9 @@ func call_func(params = []):
 		args.append(params)
 	for p in self.arguments:
 		args.append(p)
-	return self.target.callv(self.method, args)
+	var obj = self.target
+	if obj:
+		return obj.callv(self.method, args)
+	elif OS.is_debug_build():
+		assert(false) # The caller of this handler is already released
+	return null

@@ -31,6 +31,8 @@ extends Module
 class_name UtilsModule
 
 var last_daily_check_time = 0
+
+# Array<Handler>
 var daily_tasks = []
 
 # 现在时刻
@@ -49,8 +51,12 @@ func start():
 	_daily_check()
 	
 # 添加每天执行一次的任务
-func add_daliy_task(task: FuncRef):
-	daily_tasks.append(task)
+func add_daliy_task(target: Object, method: String, arguments = []):
+	var handler: Handler = Handler.new()
+	handler.target = target
+	handler.method = method
+	handler.arguments = arguments
+	daily_tasks.append(handler)
 
 func save() -> Dictionary:
 	return {
