@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "EventEmitter",
+"class": "Buff",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/buff/Buff.gd"
+}, {
+"base": "Module",
+"class": "BuffModule",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/buff/BuffModule.gd"
+}, {
 "base": "Reference",
 "class": "EventEmitter",
 "language": "GDScript",
@@ -39,6 +49,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/simple-game-framework/core/SimpleGameFramework.gd"
 }, {
+"base": "Buff",
+"class": "TimeOutBuff",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/buff/TimeOutBuff.gd"
+}, {
+"base": "Buff",
+"class": "TimerBuff",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/buff/TimerBuff.gd"
+}, {
 "base": "Module",
 "class": "TimerModule",
 "language": "GDScript",
@@ -50,12 +70,16 @@ _global_script_classes=[ {
 "path": "res://addons/simple-game-framework/modules/UtilsModule.gd"
 } ]
 _global_script_class_icons={
+"Buff": "",
+"BuffModule": "",
 "EventEmitter": "",
 "GamePoint": "",
 "Handler": "",
 "Messenger": "",
 "Module": "",
 "SimpleGameFramework": "",
+"TimeOutBuff": "",
+"TimerBuff": "",
 "TimerModule": "",
 "UtilsModule": ""
 }
