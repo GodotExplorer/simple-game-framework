@@ -5,6 +5,7 @@ func _init():
 	add_module('utils', UtilsModule.new())
 	add_module('timer', timer)
 	add_module('test', TestModule.new())
+	add_module('energe', GamePoint.new())
 	timer.once(3, self, 'timer_func_once')
 	timer.loop(2, self, 'timer_func_loop')
 
