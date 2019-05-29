@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://addons/simple-game-framework/core/SimpleGameFramework.gd"
 }, {
 "base": "Buff",
+"class": "StrengthBuff",
+"language": "GDScript",
+"path": "res://addons/simple-game-framework/modules/buff/StrengthBuff.gd"
+}, {
+"base": "Buff",
 "class": "TimeOutBuff",
 "language": "GDScript",
 "path": "res://addons/simple-game-framework/modules/buff/TimeOutBuff.gd"
@@ -78,6 +83,7 @@ _global_script_class_icons={
 "Messenger": "",
 "Module": "",
 "SimpleGameFramework": "",
+"StrengthBuff": "",
 "TimeOutBuff": "",
 "TimerBuff": "",
 "TimerModule": "",
