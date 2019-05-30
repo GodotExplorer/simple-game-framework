@@ -31,12 +31,13 @@ tool
 extends Node
 class_name SimpleGameFramework
 
-var modules = {}				# 模块容器
-var paused = false				# 游戏暂停标记
-var initialized = false 		# 是否初始化完毕标记
-var setuped = false				# 是否 setup 完成标记
-var request_save = false		# 是否需要执行存档
-var messenger = Messenger.new() # 消息中枢
+var modules = {}						# 模块容器
+var paused = false						# 游戏暂停标记
+var initialized = false 				# 是否初始化完毕标记
+var setuped = false						# 是否 setup 完成标记
+var request_save = false				# 是否需要执行存档
+var messenger = Messenger.new() 		# 消息中枢
+var evaluator = ValueEvaluator.new() 	# 表达式计算器
 
 # 检查是否存在模块
 func has_module(name: String) -> bool:
