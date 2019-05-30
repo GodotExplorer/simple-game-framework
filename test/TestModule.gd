@@ -1,13 +1,13 @@
 extends Module
 
 func initialize():
-	game.modules.utils.add_daliy_task(self, 'once_a_day')
+	game.modules.daily.add_daliy_task(self, 'once_a_day')
 
 func start():
 	print("Test module started")
 	
 func once_a_day():
-	print("hello today is ", game.modules.utils.now())
+	print("hello today is ", OS.get_date())
 
 func save():
 	return {

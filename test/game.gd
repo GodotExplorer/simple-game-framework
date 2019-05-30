@@ -2,7 +2,7 @@ extends SimpleGameFramework
 const TestModule = preload("TestModule.gd")
 var timer = TimerModule.new()
 func _init():
-	add_module('utils', UtilsModule.new())
+	add_module('daily', DailyTask.new())
 	add_module('timer', timer)
 	add_module('test', TestModule.new())
 	add_module('energe', GamePoint.new())
