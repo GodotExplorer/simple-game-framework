@@ -78,19 +78,29 @@ func set_point(value):
 		emit_signal("point_changed", amount)
 
 # 自动奖励点数的速度
-func get_auto_charge_speed():
+func get_auto_charge_speed() -> float:
 	return auto_charge_amount / auto_charge_interval
+
+# 获取下一次自动获得收益的时刻
+func get_next_auto_charge_time() -> float:
+	return _last_auto_charge_time + auto_charge_interval
+
+# 获取下一次自动收益的时间间隔
+func get_next_auto_charge_duration() -> float:
+	return get_next_auto_charge_time() - now()
 
 # 重置为最大值
 func fill_point():
 	set_point(max(point_max, point))
 	emit_signal("point_filled")
 
+# 获得指定时间的收益
 func _charge_for_duration(duration):
-	var auto_charge_count = int(duration / auto_charge_interval)
+	var auto_charge_count = floor(duration / auto_charge_interval)
 	var amount = auto_charge_count * auto_charge_amount
 	charge(amount)
-	_last_auto_charge_time = now()
+	var uncounted_duration = duration - auto_charge_count * auto_charge_interval
+	_last_auto_charge_time = now() - uncounted_duration
 
 # 离线收益
 func _offline_point_reward(duration):
@@ -102,7 +112,6 @@ func _frame_auto_charge():
 	var duration = now - _last_auto_charge_time
 	if duration >= auto_charge_interval:
 		_charge_for_duration(duration)
-		_last_auto_charge_time = now
 
 func save() -> Dictionary:
 	return {
