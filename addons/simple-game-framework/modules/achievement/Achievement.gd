@@ -33,6 +33,10 @@ class_name Achievement
 
 signal accomplish()
 
+const Events = {
+	ACCOMPLISH =  "accomplish",
+}
+
 enum CheckType { FRAME, EVENT }
 
 var check_type = CheckType.EVENT	# 检查条件的时机
@@ -45,15 +49,20 @@ func update(dt):
 	if check_type == CheckType.FRAME:
 		_check_condition()
 
-func watch_events():
+# 绑定要监听的事件
+func start_listen_events():
+	pass
+
+# 解绑监听的事件
+func stop_listen_events():
 	pass
 
 func _check_condition():
 	if not accomplished:
 		if condition.is_true():
 			accomplished = true
-			emit("accomplish")
-			emit_signal("accomplish")
+			emit(Events.ACCOMPLISH)
+			emit_signal(Events.ACCOMPLISH)
 
 func save() -> Dictionary:
 	return {

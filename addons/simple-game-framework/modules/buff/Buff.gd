@@ -35,6 +35,11 @@ class_name Buff
 signal started()
 signal stopped()
 
+const Events = {
+	STARTED = "started",
+	STOPPED = "stopped",
+}
+
 # 外部 read only 是否已经开始
 var _started = false
 

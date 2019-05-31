@@ -10,6 +10,9 @@ script = ExtResource( 1 )
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 2 )
+silde_detect_method = 1
+slide_distance = 100
+slide_speed = 600
 
 [node name="Label" type="Label" parent="."]
 margin_left = 38.049

@@ -29,38 +29,34 @@ extends Module
 class_name AchievementModule
 
 # Array<Achievement>
-var active_achievements = []
-var accomplished_achievements = []
+var achievements = []
 
 # 达成成就
 signal accomplish(achievement)
 
 # 添加成就
 func add_achivement(achiv: Achievement):
-	if achiv.accomplished:
-		accomplished_achievements.append(achiv)
-	else:
-		achiv.once("accomplish", self, "on_achievement_accomplished", [achiv])
-		achiv.watch_events()
-		active_achievements.append(achiv)
+	achievements.append(achiv)
+	if not achiv.accomplished:
+		achiv.once(Achievement.Events.ACCOMPLISH, self, "on_achievement_accomplished", [achiv.get_instance_id()])
+		achiv.start_listen_events()
 
 func update(dt):
-	for a in active_achievements:
-		a.update(dt)
+	for a in achievements:
+		if not a.accomplished:
+			a.update(dt)
 
-func on_achievement_accomplished(a: Achievement):
-	active_achievements.erase(a)
-	accomplished_achievements.append(a)
-	emit("accomplish", a)
-	emit_signal("accomplish", a)
-	
+func on_achievement_accomplished(id: int):
+	var a: Achievement = instance_from_id(id)
+	a.stop_listen_events()
+	emit(Achievement.Events.ACCOMPLISH, a)
+	emit_signal(Achievement.Events.ACCOMPLISH, a)
 
 func save() -> Dictionary:
-	var achievements = active_achievements + accomplished_achievements
 	var data = Serializer.serialize_instances(achievements)
 	return data
 
 func load(data: Dictionary):
-	var achievements = Serializer.unserialize_instances(data)
-	for a in achievements:
+	var new_achives = Serializer.unserialize_instances(data)
+	for a in new_achives:
 		add_achivement(a)

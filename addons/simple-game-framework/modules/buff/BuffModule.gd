@@ -42,12 +42,12 @@ func add_buff(buff: Buff):
 	if not buffs.has(buff):
 		if not buff.is_running():
 			buff.start()
-		buff.connect("stopped", self, "remove_buff", [buff])
+		buff.connect(Buff.Events.STOPPED, self, "remove_buff", [buff])
 		buffs[buff] = true
 
 # 删除 Buff
 func remove_buff(buff: Buff):
-	buff.disconnect("stopped", self, "remove_buff")
+	buff.disconnect(Buff.Events.STOPPED, self, "remove_buff")
 	if buffs.has(buff):
 		if buffs[buff]:
 			buffs[buff] = false

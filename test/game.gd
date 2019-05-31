@@ -38,8 +38,11 @@ class ClickAchievement extends Achievement:
 		condition.register = self.register
 		condition.params = ['click_count', 5]
 		self.register.values.click_count = 0
-	func watch_events():
+	func start_listen_events():
 		game.messenger.on('click', self, "_on_click")
+	func stop_listen_events():
+		game.messenger.off('click', self, "_on_click")
 	func _on_click():
 		self.register.values.click_count += 1
 		self._check_condition()
+		print(self.register.values)
