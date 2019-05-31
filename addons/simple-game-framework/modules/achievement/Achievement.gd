@@ -31,16 +31,36 @@ tool
 extends EventEmitter
 class_name Achievement
 
+signal accomplish()
+
 enum CheckType { FRAME, EVENT }
 
 var check_type = CheckType.EVENT	# 检查条件的时机
 var accomplished = false			# 是否已经完成
+var condition: Condition = null		# 完成条件
+# 寄存器
+var register: ValueEvaluator.Register = ValueEvaluator.Register.new()
 
 func update(dt):
+	if check_type == CheckType.FRAME:
+		_check_condition()
+
+func watch_events():
 	pass
 
+func _check_condition():
+	if not accomplished:
+		if condition.is_true():
+			accomplished = true
+			emit("accomplish")
+			emit_signal("accomplish")
+
 func save() -> Dictionary:
-	return { 'accomplished': self.accomplished }
+	return {
+		'accomplished': self.accomplished,
+		'register': self.register.values,
+	}
 
 func load(data: Dictionary):
 	accomplished = data.accomplished
+	register.values = data.register

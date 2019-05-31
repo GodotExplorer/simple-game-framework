@@ -10,9 +10,6 @@ script = ExtResource( 1 )
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 2 )
-silde_detect_method = 1
-slide_distance = 100
-slide_speed = 600
 
 [node name="Label" type="Label" parent="."]
 margin_left = 38.049
@@ -33,5 +30,13 @@ margin_top = 99.0946
 margin_right = 102.342
 margin_bottom = 119.095
 text = "-"
+
+[node name="click" type="Button" parent="."]
+margin_left = 177.283
+margin_top = 48.9202
+margin_right = 255.283
+margin_bottom = 76.9202
+text = "click"
 [connection signal="pressed" from="add" to="." method="_on_add_pressed"]
 [connection signal="pressed" from="minus" to="." method="_on_minus_pressed"]
+[connection signal="pressed" from="click" to="." method="_on_click_pressed"]

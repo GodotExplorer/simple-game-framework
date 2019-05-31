@@ -28,21 +28,35 @@ tool
 extends EventEmitter
 class_name ValueEvaluator
 
-# 求值公式
-class Evolutor:
-	func get_value(input):
-		return input
+const utils = preload("res://addons/gdutils/utils/__init__.gd")
+
+# 求值公式接口
+class IEvolutor:
+	func has_value(prop) -> bool:
+		return false
+	func get_value(prop):
+		return null
+
+# 寄存器
+class Register extends IEvolutor:
+	var values = {}
+	func has_value(prop) -> bool:
+		return prop in values
+	func get_value(prop):
+		return values[prop]
 
 # 求值公式表
-var evolutors = {}
+# Array<IEvolutor>
+var evolutors = []
 
 # 计算值
 func evalute(input):
-	if input in evolutors:
-		return evolutors[input].get_value(input)
+	for e in evolutors:
+		if e.has_value(input):
+			return e.get_value(input)
 	return input
 
 # 添加公式
-func add_evolutor(id, evolutor):
-	if evolutor is Evolutor:
-		evolutors[id] = evolutor
+func add_evolutor(evolutor):
+	if utils.implements(evolutor, IEvolutor):
+		evolutors.append(evolutor)

@@ -51,6 +51,7 @@ func start():
 	if not _started:
 		on_start()
 		_started = true
+		emit("started")
 		emit_signal("started")
 
 # 停止
@@ -58,6 +59,7 @@ func stop():
 	if _started:
 		on_stop()
 		_started = false
+		emit("stopped")
 		emit_signal("stopped")
 
 # Buff 启动回调

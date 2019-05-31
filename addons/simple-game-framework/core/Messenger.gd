@@ -62,7 +62,7 @@ func remove_all_liseners():
 # * [type: String] 事件类型  
 # * [params: Variant = null] 事件参数  
 #
-func emit(type: String, params = null):
+func emit(type: String, params = []):
 	for listener in _listeners:
 		listener.on_event(type, params)
 	.emit(type, params)

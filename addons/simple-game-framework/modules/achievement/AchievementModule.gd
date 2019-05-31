@@ -25,12 +25,42 @@
 ##################################################################################
 
 tool
-extends Condition
-class_name BoolCondition
+extends Module
+class_name AchievementModule
 
-func is_true():
-	if self.params.size():
-		var input = game.evaluator.evalute(self.params[0])
-		if input:
-			return true
-	return false
+# Array<Achievement>
+var active_achievements = []
+var accomplished_achievements = []
+
+# 达成成就
+signal accomplish(achievement)
+
+# 添加成就
+func add_achivement(achiv: Achievement):
+	if achiv.accomplished:
+		accomplished_achievements.append(achiv)
+	else:
+		achiv.once("accomplish", self, "on_achievement_accomplished", [achiv])
+		achiv.watch_events()
+		active_achievements.append(achiv)
+
+func update(dt):
+	for a in active_achievements:
+		a.update(dt)
+
+func on_achievement_accomplished(a: Achievement):
+	active_achievements.erase(a)
+	accomplished_achievements.append(a)
+	emit("accomplish", a)
+	emit_signal("accomplish", a)
+	
+
+func save() -> Dictionary:
+	var achievements = active_achievements + accomplished_achievements
+	var data = Serializer.serialize_instances(achievements)
+	return data
+
+func load(data: Dictionary):
+	var achievements = Serializer.unserialize_instances(data)
+	for a in achievements:
+		add_achivement(a)

@@ -78,47 +78,15 @@ func get_buff(type: GDScript) -> Array:
 
 # 存档
 func save() -> Dictionary:
-	# Map<GDScript, ID>
-	var classes = {}
-	# Map<ID, Dictionary>
-	var classes_serialized = {}
-	# 存档数据
-	var buff_list = []
-	var idx = 0
+	var items = []
 	for b in buffs:
-		if not buffs[b]:
-			# 忽略已经失效的 buff
-			continue
-		var type = b.get_type()
-		if not classes.has(type):
-			var dict = inst2dict(b)
-			classes[type] = idx
-			classes_serialized[idx] = {
-				"path": dict["@path"],
-				"subpath": dict["@subpath"],
-			}
-			idx += 1
-		var buff_data = {
-			"type": classes[type],
-			"data": b.save()
-		}
-		buff_list.append(buff_data)
-	return {
-		"types": classes_serialized,
-		"buffs": buff_list
-	}
+		if not buffs[b]: continue
+		items.append(b)
+	return Serializer.serialize_instances(items)
 
 # 读档
 func load(data):
-	var classes = {}
-	for id in data.types:
-		var base = load(data.types[id].path)
-		var script = base
-		if not data.types[id].subpath.empty():
-			script = base.get(data.types[id].subpath)
-		classes[id] = script
-	for conf in data.buffs:
-		var buff = classes[str(conf.type)].new()
-		buff.load(conf.data)
+	var items = Serializer.unserialize_instances(data)
+	for buff in items:
 		buff._started = true
 		add_buff(buff)
