@@ -49,7 +49,7 @@ func initialize():
 	_initialized = true
 
 func process(dt):
-	if auto_charge_on_paused and game.paused:
+	if auto_charge_on_paused and (SimpleGameFramework.get_singeleton() as SimpleGameFramework).paused:
 		_frame_auto_charge()
 
 func update(dt):

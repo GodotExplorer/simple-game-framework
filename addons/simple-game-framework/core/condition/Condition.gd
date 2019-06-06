@@ -19,4 +19,4 @@ func get_param(idx: int):
 		var raw = self.params[idx]
 		if register and register.has_value(raw):
 			return register.get_value(raw)
-		return game.evaluator.evalute(raw)
+		return (SimpleGameFramework.get_singeleton() as SimpleGameFramework).evaluator.evalute(raw)

@@ -31,6 +31,7 @@ tool
 extends Node
 class_name SimpleGameFramework
 
+const statics = {}
 var modules = {}						# 模块容器
 var paused = false						# 游戏暂停标记
 var initialized = false 				# 是否初始化完毕标记
@@ -160,3 +161,9 @@ func _ready():
 
 func _exit_tree():
 	save()
+
+func _init():
+	statics["singeleton"] = self
+
+static func get_singeleton():
+	return statics["singeleton"]
