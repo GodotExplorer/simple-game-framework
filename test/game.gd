@@ -5,7 +5,7 @@ func _init():
 	add_module('daily', DailyTask.new())
 	add_module('timer', timer)
 	add_module('test', TestModule.new())
-	add_module('energe', GamePoint.new())
+	add_module('energe', AutoIncreasedGamePoint.new())
 	add_module('buff', BuffModule.new())
 	add_module('achievement', AchievementModule.new())
 	timer.once(3, self, 'timer_func_once')

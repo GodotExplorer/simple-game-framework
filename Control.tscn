@@ -35,10 +35,10 @@ margin_bottom = 119.095
 text = "-"
 
 [node name="click" type="Button" parent="."]
-margin_left = 177.283
-margin_top = 48.9202
-margin_right = 255.283
-margin_bottom = 76.9202
+margin_left = 176.447
+margin_top = 49.3383
+margin_right = 254.447
+margin_bottom = 77.3383
 text = "click"
 [connection signal="pressed" from="add" to="." method="_on_add_pressed"]
 [connection signal="pressed" from="minus" to="." method="_on_minus_pressed"]
