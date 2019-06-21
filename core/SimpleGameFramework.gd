@@ -122,8 +122,8 @@ func queue_save():
 # 读档
 func load():
 	var data = raw_load()
-	for name in data:
-		if self.modules.has(name):
+	for name in self.modules:
+		if name in data:
 			var m = self.modules[name]
 			m.load(data[name])
 
