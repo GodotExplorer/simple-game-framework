@@ -30,7 +30,7 @@
 tool
 extends EventEmitter
 class_name Messenger
-const utils = preload("res://addons/gdutils/utils/__init__.gd")
+const utils = preload("../utils.gd")
 
 # 监听器接口类
 class IMessageListerner:

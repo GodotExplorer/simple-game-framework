@@ -11,7 +11,6 @@
 * 定时器
 
 ## 今后还会支持的功能
-* Excel 配置表数据的使用
 * 道具模块
 * 背包模块
 * 任务模块
@@ -20,11 +19,10 @@
 所有提供的内置模块功能都可以扩展和替换。
 
 ## 如何搭建框架
-1. 拷贝 `addons/simple-game-framework` 目录到 `res://addons` 内
-2. 下载 [gdutils](https://github.com/GodotExplorer/gdutils) 扩展，拷贝到 `res://addons` 内
-3. 创建一个继承自 `SimpleGameFramework` 的脚本类，并将其添加为 `autoload` 单例。
-4. 添加所需的内置模块
-5. 实现你自己的`Module`并添加到框架中
+1. 拷贝 `simple-game-framework` 目录到 `res://addons` 内
+2. 创建一个继承自 `SimpleGameFramework` 的脚本类，并将其添加为 `autoload` 单例。
+3. 添加所需的内置模块
+4. 实现你自己的`Module`并添加到框架中
 
 如下为一个`game.gd`示例，可将其添加为全局单例 `game`
 ```gdscript
@@ -44,5 +42,5 @@ func _process(dt):
 
 ```gdscript
 # 每60秒存档一次
-game.modules.timer.loop(60, self, "save")
+game.modules.timer.loop(60, game, "save")
 ```

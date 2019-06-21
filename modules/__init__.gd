@@ -27,7 +27,10 @@
 ##################################################################################
 
 tool
-extends Node
 
-const core = preload("core/__init__.gd")
-const modules = preload("modules/__init__.gd")
+const AutoIncreasedGamePoint = preload("AutoIncreasedGamePoint.gd")
+const DailyTask = preload("DailyTask.gd")
+const GamePoint = preload("GamePoint.gd")
+const TimerModule = preload("TimerModule.gd")
+const achievement = preload("achievement/__init__.gd")
+const buff = preload("buff/__init__.gd")
