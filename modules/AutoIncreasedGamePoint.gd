@@ -1,10 +1,9 @@
+# 游戏点数，可用于如 体力 金币 等相关的数值记录
+# 支持按固定时间间隔自动获得奖励
+
 tool
 extends GamePoint
 class_name AutoIncreasedGamePoint
-
-# @class `GamePoint`
-# 游戏点数，可用于如 体力 金币 等相关的数值记录
-# 支持按固定时间间隔自动获得奖励
 
 signal point_filled()					# 充满点数
 var point_max = 100						# 设计最大点数

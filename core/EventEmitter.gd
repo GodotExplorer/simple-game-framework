@@ -1,30 +1,3 @@
-##################################################################################
-#                            This file is part of                                #
-#                                GodotExplorer                                   #
-#                       https://github.com/GodotExplorer                         #
-##################################################################################
-# Copyright (c) 2019 Godot Explorer                                              #
-#                                                                                #
-# Permission is hereby granted, free of charge, to any person obtaining a copy   #
-# of this software and associated documentation files (the "Software"), to deal  #
-# in the Software without restriction, including without limitation the rights   #
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      #
-# copies of the Software, and to permit persons to whom the Software is          #
-# furnished to do so, subject to the following conditions:                       #
-#                                                                                #
-# The above copyright notice and this permission notice shall be included in all #
-# copies or substantial portions of the Software.                                #
-#                                                                                #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     #
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       #
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    #
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         #
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  #
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  #
-# SOFTWARE.                                                                      #
-##################################################################################
-
-# @class `EventEmitter`
 # 基础事件管理器
 
 tool
@@ -33,8 +6,8 @@ class_name EventEmitter
 
 # 回调对象
 class EventHandler extends Handler:
-	var type: String = ""
-	var one_shot = false
+	var type: String = ""	# 事件类型
+	var one_shot = false	# 是否只执行一次
 
 # 事件回调表
 # Map<String, EventHandler[]>
@@ -44,7 +17,7 @@ var _event_handlers = {}
 # - - - - - - - - - -  
 # *Parameters*  
 # * [type: String] 事件类型  
-# * [params: Variant = null] 事件参数  
+# * [params: Variant|Array = null] 事件参数  
 #
 func emit(type: String, params = []):
 	if type in _event_handlers:
@@ -75,7 +48,10 @@ func on(type: String, target: Object, method: String, arguments = []) -> EventHa
 	handler.target = target
 	handler.method = method
 	handler.one_shot = false
-	handler.arguments = arguments
+	if typeof(arguments) == TYPE_ARRAY: 
+		handler.arguments = arguments.duplicate()
+	else:
+		handler.arguments = [arguments]
 	if type in _event_handlers:
 		_event_handlers[type].append(handler)
 	else:

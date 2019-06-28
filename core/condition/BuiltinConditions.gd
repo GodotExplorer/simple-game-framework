@@ -1,3 +1,5 @@
+# 内置条件模块，提供基础的逻辑运算条件检查
+
 tool
 extends Reference
 class_name BuiltinConditions

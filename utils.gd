@@ -1,3 +1,5 @@
+# 常用工具模块
+
 tool
 
 # Check does an object has all of script methods of target class  

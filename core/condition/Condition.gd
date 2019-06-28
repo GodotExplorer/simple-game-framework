@@ -1,9 +1,15 @@
+# 条件类，表示一些条件
+# 如任务是否完成、条件是否能够解锁等
+
 tool
 extends EventEmitter
 class_name Condition
 
-# Array<Value>
+# Array<Value> 条件的参数
 var params = []
+
+# 寄存取值器**引用**， 用于从取参数的具体值
+# 默认为 框架中提供的 `evaluator` 取值器
 var register: ValueEvaluator.Register = null
 
 func is_true():

@@ -1,79 +1,109 @@
-##################################################################################
-#                            This file is part of                                #
-#                                GodotExplorer                                   #
-#                       https://github.com/GodotExplorer                         #
-##################################################################################
-# Copyright (c) 2019 Godot Explorer                                              #
-#                                                                                #
-# Permission is hereby granted, free of charge, to any person obtaining a copy   #
-# of this software and associated documentation files (the "Software"), to deal  #
-# in the Software without restriction, including without limitation the rights   #
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      #
-# copies of the Software, and to permit persons to whom the Software is          #
-# furnished to do so, subject to the following conditions:                       #
-#                                                                                #
-# The above copyright notice and this permission notice shall be included in all #
-# copies or substantial portions of the Software.                                #
-#                                                                                #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     #
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       #
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    #
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         #
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  #
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  #
-# SOFTWARE.                                                                      #
-##################################################################################
+# 定时器模块
 
 tool
 extends Module
 class_name TimerModule
 
+# 更新模式
+enum UpdateMode {
+	PROCESS,
+	UPDATE,
+}
+
+# 定时器
 class TimerHandler extends Handler:
-	var check_time = 0.0
-	var interval = 0.0
-	var one_shot = false
-	var repeat = 0
-	func start():
-		self.check_time = OS.get_system_time_msecs() / 1000.0 + self.interval
+	var check_time = 0.0		# 触发时间
+	var interval = 0.0			# 时间间隔
+	var max_repeat = 0xFFFFFF	# 最大循环次数
+	var params = []				# 自定义参数
+	var repeat = 0 				# 当前重复次数
 
+# Array<TimerHandler> 定时器列表
 var _handlers = []
+# 更新模式（在 `process` 中或 `update` 中更新定时器）
+var update_mode = UpdateMode.PROCESS
 
-func loop(interval: float, target: Object, method: String, args = []) -> TimerHandler:
+# 创建无限循环定时器
+# 需要通过 `cancel` 方法手动停止
+# - - - - - - - - - -  
+# *Parameters*  
+# * [interval: float] 时间间隔
+# * [target: Object] 回调对象
+# * [method: String] 回调方法
+# * [params: Variant] 自定义参数
+# - - - - - - - - - -  
+# *Returns* TimerHandler  
+# * Return 返回创建的定时器对象
+func loop(interval: float, target: Object, method: String, params = []) -> TimerHandler:
 	var handler: TimerHandler = TimerHandler.new()
 	handler.target = target
 	handler.method = method
 	handler.interval = interval
-	handler.one_shot = false
-	handler.start()
+	handler.params = params
+	handler.check_time = interval
 	_handlers.append(handler)
 	return handler
 
-func once(delay, target: Object, method: String, args = []) -> Handler:
-	var handler: TimerHandler = loop(delay, target, method, args)
-	handler.one_shot = true
+# 创建循环定时器
+# - - - - - - - - - -  
+# *Parameters*  
+# * [interval: int] 重复次数
+# * [interval: float] 时间间隔
+# * [target: Object] 回调对象
+# * [method: String] 回调方法
+# * [params: Variant] 自定义参数
+# - - - - - - - - - -  
+# *Returns* TimerHandler  
+# * Return 返回创建的定时器对象
+func repeat(repeat: int, interval: float, target: Object, method: String, params = []) -> TimerHandler:
+	var handler = loop(interval, target, method, params)
+	handler.max_repeat = repeat
 	return handler
-	
+
+# 创建只执行一次的定时器  
+# - - - - - - - - - -  
+# * [delay: float] 延迟时间
+# * [target: Object] 回调对象
+# * [method: String] 回调方法
+# * [params: Variant] 自定义参数
+# - - - - - - - - - -  
+# *Returns* TimerHandler  
+# * Return 返回创建的定时器对象
+func once(delay, target: Object, method: String, params = []) -> Handler:
+	return repeat(delay, 0, target, method, params)
+
+# 取消定时器  
+# - - - - - - - - - -  
+# *Parameters*  
+# * [timer: TimerHandler] 要取消的定时器
 func cancel(timer: TimerHandler):
 	if timer in _handlers:
 		_handlers.erase(timer)
 
+# 清空所有定时器
 func clear():
 	_handlers = []
 
-# 恒更新，不考虑逻辑是否初始化完毕或暂停等逻辑，固定每帧调用
-func process(dt: float) -> void:
+# 更新定时器
+func update_timers(dt):
 	var removal_handlers = []
-	var now = now()
 	for h in _handlers:
-		if h.check_time <= now:
+		h.check_time -= dt
+		if h.check_time <= 0:
 			h.call_func(h)
-			if h.one_shot:
+			h.repeat += 1
+			if h.repeat >= h.max_repeat:
 				removal_handlers.append(h)
 			else:
-				h.repeat += 1
-				h.start()
+				h.check_time = h.interval
 	for h in removal_handlers:
 		_handlers.erase(h)
 
-func now() -> float:
-	return OS.get_system_time_msecs() / 1000.0
+func process(dt: float) -> void:
+	if update_mode == UpdateMode.PROCESS:
+		update_timers(dt)
+
+func update(dt: float):
+	if update_mode == UpdateMode.UPDATE:
+		update_timers(dt)
+	
